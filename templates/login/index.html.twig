@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Login
+    
+{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        <div class="form-signin">
+            {{ form_start(form, {'attr' : {'id' : 'loginForm' }}
+            ) }}
+
+            {{ form_label(form.email) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control','name':'username' }}
+                ) }}
+                            
+                {{ form_label(form.password) }}
+                {{ form_widget(form.password, {'attr': {'class': 'form-control','name':'password' }}
+                ) }}
+                        
+            {{ form_widget(form.login, {'attr': {'class': 'btn btn-primary','name':'submit' }}
+            ) }}
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
