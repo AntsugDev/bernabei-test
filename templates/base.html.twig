@@ -5,6 +5,9 @@
         <title>
             {% block title %}
                 Welcome!
+                                                                            
+                                                            
+                                            
                             
             {% endblock %}
         </title>
@@ -22,12 +25,17 @@
         {% endblock %}
     </head>
     <body>
-        <main>
+        <div class="navCust">
             <div class="title">
                 <h2>
                     {{ site_name }}
                 </h2>
             </div>
+
+            
+        </div>
+        <main>
+
             <br/>
             <div class="content">
                 {% block body %}{% endblock %}

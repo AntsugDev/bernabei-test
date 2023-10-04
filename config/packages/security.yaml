@@ -1,4 +1,6 @@
 security:
+    
+
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -12,19 +14,18 @@ security:
         main:
             lazy: true
             provider: users_in_memory
-           
-
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+         
+            
+            custom_authenticator: App\Security\AuthCustAuthenticator
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                # target: app_any_route
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-         #- { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         #- { path: ^/home, roles: ROLE_USER }
+             # - { path: ^/home, role: ROLE_USER } 
 
 when@test:
     security:

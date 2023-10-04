@@ -21,6 +21,7 @@ class LoginFormType extends AbstractType
             ->add('login',SubmitType::class,['label' => 'Login'])
         ;
         $builder->setMethod('POST');
+        
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -14,10 +14,10 @@ class Login
     private ?int $id = null;
 
     #[ORM\Column(length: 125)]
-    private ?string $email = null;
+    private ?string $email = "";
 
     #[ORM\Column(length: 50)]
-    private ?string $password = null;
+    private ?string $password = "";
 
     public function getId(): ?int
     {
