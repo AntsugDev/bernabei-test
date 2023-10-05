@@ -16,18 +16,36 @@ class LoginFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email',EmailType::class,['required' => true])
-            ->add('password',PasswordType::class,['required' => true])
-            ->add('login',SubmitType::class,['label' => 'Login'])
+            ->add('email',TextType::class,['required' => true,
+                'attr'=>[
+                    'class'=>"form-control" ,
+                    'autocomplete'=>"username",
+                    'autofocus'=> true
+                ],'data' => $options['entity']->getEmail()])
+            ->add('password',PasswordType::class,['required' => true,
+                'attr'=>[
+                    'class'=>"form-control" ,
+                    'autocomplete'=>"current-password",
+
+                ],'data' => $options['entity']->getPassword()
+            ])
+            ->add('login',SubmitType::class,['label' => 'Login','attr' => ['class'=> 'btn btn-lg btn-primary']])
         ;
         $builder->setMethod('POST');
-        
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        $resolver->setRequired('entity');
         $resolver->setDefaults([
             'data_class' => Login::class,
         ]);
     }
+
+    public function getBlockPrefix()
+    {
+        return "formLogin";
+    }
+
 }

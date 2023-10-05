@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Client;
+namespace App\Utils\Client;
 
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\RedirectResponse;

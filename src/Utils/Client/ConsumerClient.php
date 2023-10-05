@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Client;
+namespace App\Utils\Client;
 
 use App\Utils\Pageable;
 

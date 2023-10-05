@@ -5,11 +5,13 @@ namespace App\Security;
 
 
 use App\Utils\Responses\UserResponse;
+use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-class WsUser implements UserInterface
+ class WsUser  implements UserInterface,TokenInterface
 {
     /**
      * @var string
@@ -22,10 +24,7 @@ class WsUser implements UserInterface
      */
     private $password;
 
-    /**
-     * @var string
-     */
-    private $cdGroup;
+
 
     /**
      * @var string
@@ -33,44 +32,144 @@ class WsUser implements UserInterface
     private $role;
 
     /**
+     * @var int
+     */
+    private $id;
+
+    /**
      * @var string
      */
-    private $sessionId;
-
-
+    private $firstname;
 
     /**
-     * @return string
+     * @var string
      */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
+    private $lastname;
 
-    /**
-     * @param string $sessionId
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-    }
 
-    /**
-     * WsUser constructor.
-     * @param UserResponse $userResponse
-     */
-    public function __construct(string $username, string $password)
+
+    public function __construct(string $username, string $password,int $id,string $lastname,string $firstname)
     {
         $this->username = $username;
         $this->password = $password;
-        $this->sessionId = session_id();
+        $this->id = $id;
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
         $this->role = "ROLE_USER";
     }
 
     /**
-     * @param array $data
-     * @return \AppBundle\Security\WsUser
-  8   */
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param string $username
+     */
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     */
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param string $role
+     */
+    public function setRole(string $role): void
+    {
+        $this->role = $role;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstname(): string
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * @param string $firstname
+     */
+    public function setFirstname(string $firstname): void
+    {
+        $this->firstname = $firstname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastname(): string
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @param string $lastname
+     */
+    public function setLastname(string $lastname): void
+    {
+        $this->lastname = $lastname;
+    }
+
+
+    public function __toString(): string
+    {
+        return (string) $this;
+    }
+
+    public function getRoleNames(): array
+    {
+        return $this->role;
+    }
+
+    public function getUser(): ?UserInterface
+    {
+        return  $this;
+    }
+
     private function loadData(array $data)
     {
 
@@ -81,34 +180,17 @@ class WsUser implements UserInterface
         return $this;
     }
 
-    /**
-     * String representation of object
-     *
-     * @link  http://php.net/manual/en/serializable.serialize.php
-     * @return string the string representation of the object or null
-     * @since 5.1.0
-     */
-    public function serialize()
+
+    public function __serialize(): array
     {
-        return serialize($this->toArray());
+        return serialize(get_object_vars($this));
     }
 
-    /**
-     * Constructs the object
-     *
-     * @link  http://php.net/manual/en/serializable.unserialize.php
-     *
-     * @param string $serialized
-     *
-     * @return void
-     * @since 5.1.0
-     */
-    public function unserialize($serialized)
+    public function __unserialize(array $data): void
     {
-        $data = unserialize($serialized);
+        $data = unserialize($data);
         $this->loadData($data);
     }
-
 
     public function getRoles(): array
     {
@@ -116,90 +198,6 @@ class WsUser implements UserInterface
         return array_unique($roles);
     }
 
-    /**
-     * Returns the password used to authenticate the user.
-     *
-     * password will be salted, encoded, and then compared to this value.
-     *
-     * @return string The password
-     */
-    public function getPassword()
-    {
-        return '';
-    }
-
-    /**
-     * Returns the salt that was originally used to encode the password.
-     *
-     * This can return null if the password was not encoded using a salt.
-     *
-     * @return string|null The salt
-     */
-    public function getSalt()
-    {
-        return null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * @param string $username
-     * @return WsUser
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCdGroup()
-    {
-        return $this->cdGroup;
-    }
-
-    /**
-     * @param string $cdGroup
-     * @return WsUser
-     */
-    public function setCdGroup($cdGroup)
-    {
-        $this->cdGroup = $cdGroup;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRole()
-    {
-        return $this->role;
-    }
-
-    /**
-     * @param string $role
-     * @return WsUser
-     */
-    public function setRole($role)
-    {
-        $this->role = $role;
-        return $this;
-    }
-
-    /**
-     * Removes sensitive data from the user.
-     *
-     * This is important if, at any given point, sensitive information like
-     * the plain-text password is stored on this object.
-     */
     public function eraseCredentials()
     {
         $data = $this->toArray();
@@ -210,107 +208,17 @@ class WsUser implements UserInterface
         $this->loadData($data);
     }
 
-    /**
-     * The equality comparison should neither be done by referential equality
-     * nor by comparing identities (i.e. getId() === getId()).
-     *
-     * However, you do not need to compare every attribute, but only those that
-     * are relevant for assessing whether re-authentication is required.
-     *
-     * Also implementation should consider that $user instance may implement
-     * the extended user interface `AdvancedUserInterface`.
-     *
-     * @return bool
-     */
-    public function isEqualTo(UserInterface $user)
-    {
-        return $user instanceof WsUser;
-    }
-
-    /**
-     * Whether a offset exists
-     *
-     * @link  http://php.net/manual/en/arrayaccess.offsetexists.php
-     *
-     * @param mixed $offset <p>
-     *                      An offset to check for.
-     *                      </p>
-     *
-     * @return boolean true on success or false on failure.
-     * </p>
-     * <p>
-     * The return value will be casted to boolean if non-boolean was returned.
-     * @since 5.0.0
-     */
-    public function offsetExists($offset)
-    {
-        return method_exists($this, 'get' . ucfirst($offset));
-    }
-
-    /**
-     * Offset to retrieve
-     *
-     * @link  http://php.net/manual/en/arrayaccess.offsetget.php
-     *
-     * @param mixed $offset <p>
-     *                      The offset to retrieve.
-     *                      </p>
-     *
-     * @return mixed Can return all value types.
-     * @since 5.0.0
-     */
-    public function offsetGet($offset)
-    {
-        return $this->{'get' . ucfirst($offset)}();
-    }
-
-    /**
-     * Offset to set
-     *
-     * @link  http://php.net/manual/en/arrayaccess.offsetset.php
-     *
-     * @param mixed $offset <p>
-     *                      The offset to assign the value to.
-     *                      </p>
-     * @param mixed $value  <p>
-     *                      The value to set.
-     *                      </p>
-     *
-     * @return void
-     * @since 5.0.0
-     */
-    public function offsetSet($offset, $value)
-    {
-        $this->{'set' . ucfirst($offset)}($value);
-    }
-
-    /**
-     * Offset to unset
-     *
-     * @link  http://php.net/manual/en/arrayaccess.offsetunset.php
-     *
-     * @param mixed $offset <p>
-     *                      The offset to unset.
-     *                      </p>
-     *
-     * @return void
-     * @since 5.0.0
-     */
-    public function offsetUnset($offset)
-    {
-        $this->offsetSet($offset, null);
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        return get_object_vars($this);
-    }
-
     public function getUserIdentifier(): string
     {
-        return (string) $this->username . ':' . $this->sessionId;
+        return (string) $this->firstname.' '.$this->lastname;
     }
+
+    public   function  setUser(UserInterface $user){}
+
+     public function getAttributes() : array {return array();}
+     public function setAttributes(array $attributes){}
+     public function hasAttribute(string $name): bool{return true;}
+     public function getAttribute(string $name): mixed{return null;}
+     public function setAttribute(string $name, mixed $value){}
+
 }

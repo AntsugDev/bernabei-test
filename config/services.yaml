@@ -6,22 +6,32 @@
 parameters:
 
 services:
-    Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'   
+    Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        
+
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
-    App\Utils\Service\LoginService:
+
+    App\Controller\:
+        resource: '../src/Controller'
         autowire: true
-   
-    
-    
-   
-   
+        public: true
+        tags: [ 'controller.service_arguments' ]
+
+    App\Utils\Service\:
+        autowire: true
+        resource: '../src/Utils/Service/*'
+        public: true
+
+
+
+
+
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
