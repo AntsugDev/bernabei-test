@@ -44,16 +44,15 @@ class HomeController extends AbstractController
 
 
         $form = $this->createForm(TableSearchType::class,null,['table' => $table]);
-
-
-        $table = $service->requestConsumer($queryString,$body);
-
+        $responnse = $service->requestConsumer($queryString,$body);
+        $request->request->set('eleTotal',$responnse['totalElements']);
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
-            'table' => $table['content'],
+            'table' => $responnse['content'],
             'form' => $form->createView(),
-
-
+            'eleTotali' => $responnse['totalElements'],
+            'nrPagine' => $responnse['totalPage'],
+            'elePerPagina' => $responnse['page']
         ]);
     }
 }

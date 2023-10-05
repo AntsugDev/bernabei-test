@@ -183,7 +183,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
     public function __serialize(): array
     {
-        return serialize(get_object_vars($this));
+        return get_object_vars($this);
     }
 
     public function __unserialize(array $data): void
@@ -223,7 +223,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 
      public function getCookies() {
-        return base64_encode(json_encode( $this->toArray()));
+        return base64_encode(json_encode( $this->__serialize()));
      }
 
 }
