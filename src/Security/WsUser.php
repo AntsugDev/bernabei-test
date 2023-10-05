@@ -221,4 +221,9 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
      public function getAttribute(string $name): mixed{return null;}
      public function setAttribute(string $name, mixed $value){}
 
+
+     public function getCookies() {
+        return base64_encode(json_encode( $this->toArray()));
+     }
+
 }

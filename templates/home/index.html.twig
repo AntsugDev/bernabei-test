@@ -4,6 +4,15 @@
 
 {% block body %}
 
+
+
+    <div  style="border:1px solid #000; width:99%; height: auto;border-radius: 0.5em;padding: 1vw 1vw 1vw 1vw">
+        {{ form_start(form, {'attr' : {'id' : 'searchTable'}}) }}
+        {{ form_end(form) }}
+
+    </div>
+    <br />
+
     <table class="table table-border table-hover table-striped table-responsive" style="width: 99%">
         <thead class="table-dark">
         <tr>
@@ -15,7 +24,16 @@
         </tr>
         </thead>
         <tbody>
+        {%  for e,i in table %}
+        <tr>
+            <td>{{ i.title }}</td>
+            <td>{{ i.description }}</td>
+            <td>{{ i.price }}</td>
+            <td>{{ i.category }}</td>
+            <td><a href="{{ i.image }}">Img</a></td>
 
+        </tr>
+        {%  endfor %}
         </tbody>
     </table>
 

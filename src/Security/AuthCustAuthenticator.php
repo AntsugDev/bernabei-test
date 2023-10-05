@@ -3,6 +3,8 @@
 namespace App\Security;
 
 use PHPUnit\Exception;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +26,7 @@ class AuthCustAuthenticator  extends AbstractLoginFormAuthenticator
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
+    public const COOKIE_NAME = 'app_user';
 
     private UrlGeneratorInterface $urlGenerator;
 
@@ -40,8 +43,11 @@ class AuthCustAuthenticator  extends AbstractLoginFormAuthenticator
     {
 
         try {
-
-            return new RedirectResponse($this->urlGenerator->generate('app_home'));
+            $cookie = new Cookie(self::COOKIE_NAME,base64_encode($token->getCookies()),0,'/','user',);
+            $response = new RedirectResponse($this->urlGenerator->generate('app_home'));
+            $response->headers->setCookie($cookie);
+            $response->send();
+            return $response;
 
         }catch (\Exception $e){
             throw new \Exception('Eccezione in fase di autenticazione('.$e->getMessage().')');
