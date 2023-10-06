@@ -3,6 +3,7 @@
 <ul>
 <li>Versione di symfony  6.3</li>
 <li>Versione node/npm 18</li>
+<ul>Php 8.0</ul>
 </ul>
 
 ***
@@ -22,7 +23,7 @@ Il progetto si compone di due parti:
 <li>FE</li>
 </ul>
 
-La prima parte vede la realizzazione di due api:
+La prima parte vede la realizzazione di diverse api:
 
 <ul>
 <li>/api/consumer</li>
@@ -90,7 +91,7 @@ curl --request POST \
 }
 </pre>
 
-Rispetto all'api originale, quest'ultima è stata lavorata per rendera simile alla paginazione in SpringBoot (vedi <a href="https://www.baeldung.com/spring-data-jpa-pagination-sorting">Esempio</a>). 
+Rispetto all'api originale, quest'ultima è stata lavorata per renderla simile alla paginazione in SpringBoot (vedi <a href="https://www.baeldung.com/spring-data-jpa-pagination-sorting">Esempio</a>). 
 
 
 #### /api/user/{id}
@@ -175,6 +176,33 @@ Nello specifico i due file interessati:
 
 </ul>
 
+Per la login usare uno dei seguenti utenti:
+<pre>
+array(
+        0 => array(
+            "id" => 1,
+            "username" => "antonio.sugamele@gmail.com",
+            "pwd" => "123456",
+            "firstName" => "Antonio",
+            "lastName" =>"Sugamele"
+        ),
+        1 => array(
+            "id" => 2,
+            "username" => "s.tricarico@bernabei.it",
+            "pwd" => "123456",
+            "firstName" => "Simone",
+            "lastName" =>"Tricarico"
+        ),
+        2 => array(
+            "id" => 3,
+            "username" => "tester.dev@gmail.com",
+            "pwd" => "123456",
+            "firstName" => "Tester",
+            "lastName" =>"Dev"
+        ),
+    );
+</pre>
+
 ### Home
 
 La pagina di home si presenta con una tabella dei progetti e un form di ricerca; il form contiene:
@@ -190,3 +218,21 @@ La pagina di home si presenta con una tabella dei progetti e un form di ricerca;
 Ogni volta viene premuto il pulsante "Cerca", il sistema submit il form e ricarica la pagina secondo i nuovi filtri.
 
 ***
+
+## Altro
+
+### Autenticazione
+
+Per l'autenticazione è stata sviluppato un servizio automatico inserito nel file <i>security.yaml</i>.
+Il file in essere si trova al seguente indirizzo <a href="src/Security/AuthCustAuthenticator.php">src/Security/AuthCustAuthenticator.php</a>,
+che si occupa anche dell'entry point del portale.
+La parte non è stata terminata, per motivi temporali e in quanto la versione usata da me di solito differesce da questa e mi sono trovato un pò in difficoltà.
+
+## Event
+
+E' stato gestito un event in generale, che per l'api con autorizzazione blocca la chiamata a quest'ultima (response negativa), se il campo manca  o è vuoto.
+Inoltre, era stata gestita l'impossibilità di chiamare direttamente la pagina di Home, senza passare per la login, ma ho dovuto commentarla in quanto è un evento sempre legato all'autenticazione.
+Il file dell'evento si trova <a href="src/Utils/Service/EventAuth.php">src/Utils/Service/EventAuth.php</a>
+
+
+

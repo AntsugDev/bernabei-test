@@ -13,6 +13,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
@@ -38,7 +40,6 @@ class AuthCustAuthenticator  extends AbstractAuthenticator
 
     private WsUser $user;
 
-    private ContainerInterface $container;
 
 
 
@@ -71,14 +72,12 @@ class AuthCustAuthenticator  extends AbstractAuthenticator
      * @param UrlGeneratorInterface $urlGenerator
      * @param UserPasswordHasherInterface $hasher
      * @param WsUser $user
-     * @param Container $container
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator, UserPasswordHasherInterface $hasher, WsUser $user, ContainerInterface $container)
+    public function __construct(UrlGeneratorInterface $urlGenerator, UserPasswordHasherInterface $hasher, WsUser $user)
     {
         $this->urlGenerator = $urlGenerator;
         $this->hasher = $hasher;
         $this->user = $user;
-        $this->container = $container;
     }
 
 
@@ -115,6 +114,8 @@ class AuthCustAuthenticator  extends AbstractAuthenticator
             $request->getSession()->set(Security::AUTHENTICATION_ERROR,  new AuthenticationException('Eccezione sulla password. (status=password;exception='.$exception->getMessage().')'));
             return $this->redirectLogin();
         }
+
+
     }
 
 
