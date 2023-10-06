@@ -39,7 +39,7 @@ class ConsumerController extends AbstractController
         $queryString = $request->getQueryString();
         $obj = array();
         parse_str($queryString, $obj);
-        return $this->json($service->requestConsumer($obj['page'], $obj['size'], $obj['order'], $obj['sortBy'],$body));
+        return $this->json($service->requestConsumer($obj,$body));
     }
 
     #[Route('/api/base64', name: 'app_consumer_base64', methods: ['POST'])]

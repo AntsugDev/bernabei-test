@@ -4,14 +4,9 @@
 namespace App\Security;
 
 
-use App\Utils\Responses\UserResponse;
-use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Uid\Uuid;
 
 class WsUser  implements UserInterface,TokenInterface,PasswordAuthenticatedUserInterface
 {
@@ -88,7 +83,7 @@ class WsUser  implements UserInterface,TokenInterface,PasswordAuthenticatedUserI
     /**
      * @return string
      */
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
         return $this->username;
     }
@@ -98,6 +93,7 @@ class WsUser  implements UserInterface,TokenInterface,PasswordAuthenticatedUserI
      */
     public function setUsername(string $username): void
     {
+        if(is_null($username)) $username = "";
         $this->username = $username;
     }
 
@@ -210,7 +206,7 @@ class WsUser  implements UserInterface,TokenInterface,PasswordAuthenticatedUserI
 
     public function __serialize(): array
     {
-        return [
+        return serialize([
             "id" => $this->id,
             "username" => $this->username,
             "password" => $this->password,
@@ -218,16 +214,20 @@ class WsUser  implements UserInterface,TokenInterface,PasswordAuthenticatedUserI
             "firstname" => $this->firstname,
             "lastname" => $this->lastname
 
-        ];
+        ]);
 
     }
 
-    public function __unserialize(mixed $data): void
+    public function __unserialize($data): void
     {
-        if(!is_string($data))
-            $data = json_encode($data,true);
-
-        $data = unserialize($data);
+       [
+            "id" => $this->id,
+            "username" => $this->username,
+            "password" => $this->password,
+            "roles" => $this->role,
+            "firstname" => $this->firstname,
+            "lastname" => $this->lastname
+            ] = \is_array($data) ? $data : unserialize($data,['allowed_classes' => false]);
     }
 
     public function getRoles(): array
@@ -249,17 +249,16 @@ class WsUser  implements UserInterface,TokenInterface,PasswordAuthenticatedUserI
 
     public   function  setUser(UserInterface $user){}
 
-     public function getAttributes() : array {return array();}
-     public function setAttributes(array $attributes){}
-     public function hasAttribute(string $name): bool{return true;}
-     public function getAttribute(string $name): mixed{return null;}
-     public function setAttribute(string $name, mixed $value){}
+    public function getAttributes() : array {return array();}
+    public function setAttributes(array $attributes){}
+    public function hasAttribute(string $name): bool{return true;}
+    public function getAttribute(string $name): mixed{return null;}
+    public function setAttribute(string $name, mixed $value){}
 
 
-     public function getCookies() {
+    public function getCookies() {
         return base64_encode(json_encode( $this->__serialize()));
-     }
-
+    }
 
 
 }

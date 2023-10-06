@@ -22,10 +22,7 @@ class LoginRepository extends ServiceEntityRepository
         parent::__construct($registry, Login::class);
     }
 
-    public function validate(string $user, string $password,ConsumerService $service) {
-           $response =  $service->getUser($user,$password);
-           return count($response) >0;
-    }
+
 
 
 //    /**

@@ -3,7 +3,7 @@
 <ul>
 <li>Versione di symfony  6.3</li>
 <li>Versione node/npm 18</li>
-<ul>Php 8.0</ul>
+<li>Php 8.0</li>
 </ul>
 
 ***
@@ -238,7 +238,8 @@ Il file dell'evento si trova <a href="src/Utils/Service/EventAuth.php">src/Utils
 
 ## NOTE
 
-Nella directory <i>public</> trovi un json per <strong>Insomnia</strong>, contentente i json di prova delle api.
+Nella directory <i>public</i> trovi un json per <strong>Insomnia</strong>, contentente i json di prova delle api.
+<a href="public/Insomnia_2023-10-06.json">File insomnia</a>
 
 ****
 
