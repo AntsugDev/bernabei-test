@@ -7,6 +7,7 @@ security:
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         users_in_memory: { memory: null }
+#    enable_authenticator_manager: true
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -14,9 +15,11 @@ security:
         main:
             lazy: true
             provider: users_in_memory
-         
-            
-            custom_authenticator: App\Security\AuthCustAuthenticator
+
+
+            custom_authenticator:
+                - App\Security\AuthCustAuthenticator
+
 
             logout:
                 path: app_logout
@@ -28,8 +31,10 @@ security:
     access_control:
              - { path: ^/api/*, role: PUBLIC_ACCESS } 
              - { path: ^/, role: PUBLIC_ACCESS } 
-             - { path: ^/auth/*, roles: [ROLE_USER,ROLE_ADMIN] } 
-             - { path: ^/home, roles: [ROLE_USER,ROLE_ADMIN] } 
+             - { path: ^/auth/*, roles: [ROLE_USER,ROLE_ADMIN] }
+             - { path: ^/home, roles: [ROLE_USER,ROLE_ADMIN] }
+             - { path: ^/error, role: PUBLIC_ACCESS}
+             - { path: ^/error-cust, role: PUBLIC_ACCESS}
 
 when@test:
     security:

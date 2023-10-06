@@ -23,24 +23,34 @@
             <th>Immagine</th>
         </tr>
         </thead>
-        <tbody>
-        {%  for e,i in table %}
-            <tr>
-                <td>{{ e+1 }}</td>
-                <td>{{ i.title }}</td>
-                <td>{{ i.description }}</td>
-                <td>{{ i.price }}</td>
-                <td>{{ i.category }}</td>
-                <td><a href="{{ i.image }}">Img</a></td>
 
+        <tbody>
+        {%  if table|length > 0 %}
+            {%  for e,i in table %}
+                <tr>
+                    <td>{{ e+1 }}</td>
+                    <td>{{ i.title }}</td>
+                    <td>{{ i.description }}</td>
+                    <td>{{ i.price }}</td>
+                    <td>{{ i.category }}</td>
+                    <td><a href="{{ i.image }}">Img</a></td>
+
+                </tr>
+            {%  endfor %}
+        {%  else %}
+            <tr>
+                <td colspan="6">Non ci sono elementi in tabella</td>
             </tr>
-        {%  endfor %}
+        {%  endif %}
         </tbody>
     </table>
-    <div style="display: inline;float: left">
-        <span style="float: left">Pagina {{ elePerPagina+1 ~ '/' ~ nrPagine }}</span>
-        <span style="float: right"> Elementi totali {{ eleTotali }}</span>
-    </div>
+    <hr />
+    {%  if table|length > 0 %}
+        <div style="display: inline">
+            <div style="float: left;border: 1px solid #000; padding:1vw;font-weight: 600">Pagina {{ elePerPagina ~ '/' ~ nrPagine }}</div>
+            <div style="float: right;border: 1px solid #000; padding:1vw;font-weight: 600"> Elementi totali {{ eleTotali }}</div>
+        </div>
+    {%  endif %}
 
 
 {% endblock %}

@@ -41,4 +41,33 @@ class ConsumerController extends AbstractController
         parse_str($queryString, $obj);
         return $this->json($service->requestConsumer($obj['page'], $obj['size'], $obj['order'], $obj['sortBy'],$body));
     }
+
+    #[Route('/api/base64', name: 'app_consumer_base64', methods: ['POST'])]
+    public function base64(Request $request,ConsumerService $service): JsonResponse
+    {
+
+        $body = $request->toArray();
+        $status = 200;
+        if(
+            (!array_key_exists('username',$body) || (array_key_exists('username',$body) && strcmp( $body['username'],'') === 0 )) ||
+            (!array_key_exists('password',$body) || (array_key_exists('password',$body) && strcmp( $body['password'],'') === 0 ))
+        ) {
+            $response =
+                array(
+                    "msg" => "Richiesta errata",
+                    "timeRequest" => date('d/m/Y H:i:s',time())
+                );
+            return new JsonResponse($response, 404);
+
+        }
+        $response =
+            array(
+                "requestOriginal" => $body['username'].':'.$body['password'],
+                "base64" =>  base64_encode($body['username'].':'.$body['password']),
+                "timeRequest" => date('d/m/Y H:i:s',time())
+            );
+
+
+        return new JsonResponse($response,$status);
+    }
 }

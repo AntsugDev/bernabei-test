@@ -19,6 +19,7 @@ class HomeController extends AbstractController
 
 
 
+
         $post = $request->request->all();
 
 
@@ -52,7 +53,7 @@ class HomeController extends AbstractController
             'form' => $form->createView(),
             'eleTotali' => $responnse['totalElements'],
             'nrPagine' => $responnse['totalPage'],
-            'elePerPagina' => $responnse['page']
+            'elePerPagina' => intval(!is_null($responnse['page']) ? $responnse['page']: 0)+1
         ]);
     }
 }

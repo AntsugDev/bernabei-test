@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Login;
+use App\Utils\Service\ConsumerService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -20,6 +21,12 @@ class LoginRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Login::class);
     }
+
+    public function validate(string $user, string $password,ConsumerService $service) {
+           $response =  $service->getUser($user,$password);
+           return count($response) >0;
+    }
+
 
 //    /**
 //     * @return Login[] Returns an array of Login objects
