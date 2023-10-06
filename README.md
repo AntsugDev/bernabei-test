@@ -4,6 +4,7 @@
 <li>Versione di symfony  6.3</li>
 <li>Versione node/npm 18</li>
 <li>Php 8.0</li>
+	<li>Composer 2.1.14</li>
 </ul>
 
 ***
