@@ -3,10 +3,13 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
+    {%  if errorMsg != "" %}
+        <div class="alert alert-danger">{{ errorMsg  }}</div>
+        <br />
+    {% endif %}
+
     <div class="form-signin">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey }}</div>
-        {% endif %}
+
         {{ form_start(form, {'attr' : {'id' : 'loginForm'}}) }}
         <label for="inputUsername">Username</label>
         {{ form_widget(form.email, {'attr': {'name': 'username','id':'inputUsername'}}) }}

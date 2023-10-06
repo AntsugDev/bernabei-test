@@ -8,10 +8,12 @@ use App\Utils\Responses\UserResponse;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Uid\Uuid;
 
- class WsUser  implements UserInterface,TokenInterface
+class WsUser  implements UserInterface,TokenInterface,PasswordAuthenticatedUserInterface
 {
     /**
      * @var string
@@ -48,15 +50,40 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 
 
-    public function __construct(string $username, string $password,int $id,string $lastname,string $firstname)
+    /**
+     * @var string
+     */
+    private $plainPassword;
+
+
+    public function __construct()
     {
-        $this->username = $username;
-        $this->password = $password;
-        $this->id = $id;
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
         $this->role = "ROLE_USER";
     }
+
+
+
+    /**
+     * @return string
+     */
+    public function getPlainPassword(): string
+    {
+        return $this->plainPassword;
+    }
+
+
+
+    /**
+     * @param string $plainPassword
+     */
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
+    }
+
+
+
 
     /**
      * @return string
@@ -79,7 +106,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
      */
     public function getPassword(): string
     {
-        return $this->password;
+        return !is_null($this->password) ? $this->password : '123456';
     }
 
     /**
@@ -183,13 +210,24 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
     public function __serialize(): array
     {
-        return get_object_vars($this);
+        return [
+            "id" => $this->id,
+            "username" => $this->username,
+            "password" => $this->password,
+            "roles" => $this->role,
+            "firstname" => $this->firstname,
+            "lastname" => $this->lastname
+
+        ];
+
     }
 
-    public function __unserialize(array $data): void
+    public function __unserialize(mixed $data): void
     {
+        if(!is_string($data))
+            $data = json_encode($data,true);
+
         $data = unserialize($data);
-        $this->loadData($data);
     }
 
     public function getRoles(): array
@@ -200,12 +238,8 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
     public function eraseCredentials()
     {
-        $data = $this->toArray();
-        foreach ($data as $k => $datum) {
-            $data[$k] = null;
-        }
+        return null;
 
-        $this->loadData($data);
     }
 
     public function getUserIdentifier(): string
@@ -225,5 +259,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
      public function getCookies() {
         return base64_encode(json_encode( $this->__serialize()));
      }
+
+
 
 }

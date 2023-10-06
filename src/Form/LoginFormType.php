@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Login;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -26,8 +27,8 @@ class LoginFormType extends AbstractType
                 'attr'=>[
                     'class'=>"form-control" ,
                     'autocomplete'=>"current-password",
-
-                ],'data' => $options['entity']->getPassword()
+                    'readonly'=> true
+                ],'empty_data' =>123456
             ])
             ->add('login',SubmitType::class,['label' => 'Login','attr' => ['class'=> 'btn btn-lg btn-primary']])
         ;
