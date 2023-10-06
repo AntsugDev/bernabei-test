@@ -234,5 +234,12 @@ E' stato gestito un event in generale, che per l'api con autorizzazione blocca l
 Inoltre, era stata gestita l'impossibilità di chiamare direttamente la pagina di Home, senza passare per la login, ma ho dovuto commentarla in quanto è un evento sempre legato all'autenticazione.
 Il file dell'evento si trova <a href="src/Utils/Service/EventAuth.php">src/Utils/Service/EventAuth.php</a>
 
+***
+
+## NOTE
+
+Nella directory <i>public</> trovi un json per <strong>Insomnia</strong>, contentente i json di prova delle api.
+
+****
 
 
